@@ -1,8 +1,10 @@
+import base64
 import re
 from types import MethodType
 from typing import Any
 
 from fake_useragent import UserAgent
+from gmssl.sm2 import CryptSM2
 from requests.compat import quote
 from requests.exceptions import JSONDecodeError
 
@@ -148,8 +150,9 @@ class LCSC(Supplier):
 
 
 class LCSCApi:
+    MAIN_PAGE_URL = "https://www.lcsc.com/"
     API_BASE_URL = "https://wmsc.lcsc.com/ftps/wm/"
-    SEARCH_URL = f"{API_BASE_URL}search/v2/global"
+    SEARCH_URL = f"{API_BASE_URL}search/v3/global"
     PRODUCT_INFO_URL = f"{API_BASE_URL}product/detail?productCode={{}}"
     CURRENCY_URL = "https://wmsc.lcsc.com/wmsc/home/currency?currencyCode={}"
 
@@ -160,8 +163,18 @@ class LCSCApi:
         )
         self.session.get(self.CURRENCY_URL.format(currency))
 
+        response = self.session.get(self.MAIN_PAGE_URL)
+        if not (public_key_match := re.search(r'encryptPublicHexKey:"([a-f0-9]+)"', response.text)):
+            raise SupplierError(
+                "LCSC", f"Failed to find 'encryptPublicHexKey' in {self.MAIN_PAGE_URL} page content"
+            )
+        self.sm2 = CryptSM2(None, public_key_match.group(1), mode=1)
+
     def search(self, keyword: str):
-        return self._api_call(self.SEARCH_URL, json={"keyword": keyword})
+        assert (keyword_encrypted := self.sm2.encrypt(base64.b64encode(keyword.encode("utf-8"))))
+        return self._api_call(
+            self.SEARCH_URL, json={"keyword": f"{{secret}}04{keyword_encrypted.hex()}"}
+        )
 
     def product_detail(self, product_code: str):
         return self._api_call(self.PRODUCT_INFO_URL.format(quote(product_code, safe="")))

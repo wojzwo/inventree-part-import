@@ -22,6 +22,7 @@ dependencies = [
     "cutie",
     "error-helper",
     "fake-useragent",
+    "gmssl",
     "inventree>=0.20",
     "isocodes>=2025.8.13",
     "mouser>=0.1.5",
@@ -71,4 +72,12 @@ combine-as-imports = true
 typeCheckingMode = "strict"
 reportInvalidCast = "warning"
 reportUnnecessaryTypeIgnoreComment = "warning"
-allowedUntypedLibraries = ["browser_cookie3", "cutie", "inventree", "mouser", "tablib", "thefuzz"]
+allowedUntypedLibraries = [
+    "browser_cookie3",
+    "cutie",
+    "gmssl",
+    "inventree",
+    "mouser",
+    "tablib",
+    "thefuzz",
+]

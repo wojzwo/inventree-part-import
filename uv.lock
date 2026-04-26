@@ -211,6 +211,17 @@ wheels = [
 ]
 
 [[package]]
+name = "gmssl"
+version = "3.2.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pycryptodomex" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/41/b1/01d707a2edfaad77715b2d27e5fbf14b6bcd34dd72ea179a5facfe4b1dd7/gmssl-3.2.2-py3-none-any.whl", hash = "sha256:59f069a91eb19ef59b9e7be4d436ed01c92ce064d3d7d45a8778fc07fd2cd068", size = 10185, upload-time = "2023-02-23T06:01:39.296Z" },
+]
+
+[[package]]
 name = "idna"
 version = "3.11"
 source = { registry = "https://pypi.org/simple" }
@@ -248,6 +259,7 @@ dependencies = [
     { name = "cutie" },
     { name = "error-helper" },
     { name = "fake-useragent" },
+    { name = "gmssl" },
     { name = "inventree" },
     { name = "isocodes" },
     { name = "mouser" },
@@ -274,6 +286,7 @@ requires-dist = [
     { name = "cutie" },
     { name = "error-helper" },
     { name = "fake-useragent" },
+    { name = "gmssl" },
     { name = "inventree", git = "https://github.com/30350n/inventree-python?branch=type-hints" },
     { name = "isocodes", specifier = ">=2025.8.13" },
     { name = "mouser", specifier = ">=0.1.5" },
